@@ -1,0 +1,26 @@
+= Constants
+
+A library of molecules for scientific calculations in Ruby.
+
+== Description
+
+* Rubyforge[http://rubyforge.org/projects/bioactive]
+* Lighthouse[http://bahuvrihi.lighthouseapp.com/projects/13518-molecules/overview]
+* Github[http://github.com/bahuvrihi/molecules/tree/master]
+
+== Usage
+
+== Known Issues
+
+== Installation
+
+Constants is available as a gem through GitHub[http://github.com/bahuvrihi/molecules/tree/master].  Use:
+
+  % gem install bahuvrihi-molecules --source=http://gems.github.com
+
+== Info 
+
+Copyright (c) 2006-2008, Regents of the University of Colorado.
+Developer:: {Simon Chiang}[http://bahuvrihi.wordpress.com], {Biomolecular Structure Program}[http://biomol.uchsc.edu/], {Hansen Lab}[http://hsc-proteomics.uchsc.edu/hansenlab/] 
+Support:: CU Denver School of Medicine Deans Academic Enrichment Fund
+Licence:: MIT-Style
