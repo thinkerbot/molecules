@@ -1,5 +1,5 @@
 require File.join(File.dirname(__FILE__), '../molecules_test_helper.rb') 
-require 'molecules/emperical_formula'
+require 'molecules/empirical_formula'
 
 class EmpiricalFormulaTest < Test::Unit::TestCase
   include Molecules

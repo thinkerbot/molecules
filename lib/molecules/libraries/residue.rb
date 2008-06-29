@@ -1,10 +1,10 @@
 require 'constants/library'
-require 'molecules/molecule'
+require 'molecules/empirical_formula'
 
 module Molecules
   module Libraries
     # A Library of amino acid residues.
-    class Residue < Molecules::EmpiricalFormula
+    class Residue < EmpiricalFormula
      
       attr_reader :byte
       attr_reader :letter
@@ -23,7 +23,7 @@ module Molecules
       attr_reader :immonium_ion_mass
 
       def initialize(letter, abbr, name, side_chain_formula, classification=nil)
-        @side_chain = Molecule.parse_simple(side_chain_formula)
+        @side_chain = EmpiricalFormula.parse_simple(side_chain_formula)
         super( Utils.add(side_chain.formula.dup, BACKBONE.formula), false)
 
         @letter = letter
@@ -56,8 +56,8 @@ module Molecules
         @type == :composite
       end
 
-      BACKBONE = Molecule.parse_simple('C(2)H(2)NO') 
-      DELTA_IMMONIUM = Molecule.parse('-CO+H')
+      BACKBONE = EmpiricalFormula.parse_simple('C(2)H(2)NO') 
+      DELTA_IMMONIUM = EmpiricalFormula.parse('-CO+H')
 
       A = Residue.new('A', "Ala", "Alanine", "CH(3)", :common)
       C = Residue.new('C', "Cys", "Cysteine", "CH(3)S", :common)

@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), '../molecules_test_helper.rb') 
-require 'molecules/molecule'
+require 'molecules/empirical_formula'
 
-class MoleculeTest < Test::Unit::TestCase
+class EmpiricalFormulaClassTest < Test::Unit::TestCase
   include Molecules
   
   #
@@ -9,14 +9,14 @@ class MoleculeTest < Test::Unit::TestCase
   #
   
   def test_parse_simple_documentation
-    assert_equal "H(2)O", Molecule.parse_simple("H(2)O").to_s
-    assert_equal "H(2)O", Molecule.parse_simple("H (2) O").to_s
-    assert_equal "H(2)O", Molecule.parse_simple("HO(-1)O(2)H").to_s
+    assert_equal "H(2)O", EmpiricalFormula.parse_simple("H(2)O").to_s
+    assert_equal "H(2)O", EmpiricalFormula.parse_simple("H (2) O").to_s
+    assert_equal "H(2)O", EmpiricalFormula.parse_simple("HO(-1)O(2)H").to_s
   end
   
   def test_parse_simple
-    assert_equal([2,1], Molecule.parse_simple("HO(-1)O(2)H").formula)
-    assert_equal([2,1], Molecule.parse_simple("H O (-1  )O( 2) H ").formula)
+    assert_equal([2,1], EmpiricalFormula.parse_simple("HO(-1)O(2)H").formula)
+    assert_equal([2,1], EmpiricalFormula.parse_simple("H O (-1  )O( 2) H ").formula)
   end
   
   def test_parse_simple_fails_for_malformed_formulae
@@ -31,7 +31,7 @@ class MoleculeTest < Test::Unit::TestCase
       # anything complex
       "H + O"
     ].each do |formula|
-      assert_raise(Molecule::ParseError) { Molecule.parse_simple(formula) }
+      assert_raise(EmpiricalFormula::ParseError) { EmpiricalFormula.parse_simple(formula) }
     end
   end
   
@@ -40,9 +40,9 @@ class MoleculeTest < Test::Unit::TestCase
   #
   
   def test_parse_documentation
-    assert_equal "H(2)O", Molecule.parse("H2O").to_s
-    assert_equal "C(52)H(106)", Molecule.parse("CH3(CH2)50CH3").to_s 
-    assert_equal "C(2)H(4)N(2)", Molecule.parse("C2H3NO - H2O + NH3").to_s 
+    assert_equal "H(2)O", EmpiricalFormula.parse("H2O").to_s
+    assert_equal "C(52)H(106)", EmpiricalFormula.parse("CH3(CH2)50CH3").to_s 
+    assert_equal "C(2)H(4)N(2)", EmpiricalFormula.parse("C2H3NO - H2O + NH3").to_s 
   end
   
   def test_parse
@@ -79,7 +79,7 @@ class MoleculeTest < Test::Unit::TestCase
       "H2O-H" => "HO",
       "H2O - (OH)2+ H2O2-H2O" => ""
     }.each_pair do |formula, composition_str|
-      m = Molecule.parse(formula)
+      m = EmpiricalFormula.parse(formula)
       assert_equal composition_str, m.to_s, formula
     end
   end
@@ -102,7 +102,7 @@ class MoleculeTest < Test::Unit::TestCase
       "()",
       "()2"
     ].each do |formula|
-      assert_raise(Molecule::ParseError) { Molecule.parse(formula) }
+      assert_raise(EmpiricalFormula::ParseError) { EmpiricalFormula.parse(formula) }
     end
   end
   
@@ -111,12 +111,12 @@ class MoleculeTest < Test::Unit::TestCase
   #
   
   def break_test_class_mass_method
-    water_mass = Molecule::Element::H.mass * 2 + Molecule::Element::O.mass
+    water_mass = EmpiricalFormula::Element::H.mass * 2 + EmpiricalFormula::Element::O.mass
     assert_equal 18.010565, water_mass
     
-    assert_equal 18.010565, Molecule.mass("H2O")
-    assert_equal 18.010565, Molecule.mass("H + OH")
-    assert_equal 18, Molecule.mass("H2O", 0)
+    assert_equal 18.010565, EmpiricalFormula.mass("H2O")
+    assert_equal 18.010565, EmpiricalFormula.mass("H + OH")
+    assert_equal 18, EmpiricalFormula.mass("H2O", 0)
   end
   
   #
@@ -124,11 +124,11 @@ class MoleculeTest < Test::Unit::TestCase
   #
   
   def break_test_access_library_molecules
-    water = Molecule::H2O
+    water = EmpiricalFormula::H2O
     
-    assert_equal water, Molecule.lookup('h2o')
-    assert_equal water, Molecule.h2o
-    assert_equal 18.010565, Molecule.h2o.mass
+    assert_equal water, EmpiricalFormula.lookup('h2o')
+    assert_equal water, EmpiricalFormula.h2o
+    assert_equal 18.010565, EmpiricalFormula.h2o.mass
   end
 
   # vs the VG Analytical Organic Mass Spectrometry reference, reference date unknown (prior to 2005)
@@ -148,7 +148,7 @@ CH3CO 43.01839 43.0452}
       monoisotopic = monoisotopic.to_f
       average = average.to_f
       
-      molecule = Molecule.parse(name)
+      molecule = EmpiricalFormula.parse(name)
       assert_in_delta monoisotopic, molecule.mass, delta_mass, mol_str 
       # TODO -- check average mass
     end    
@@ -164,7 +164,7 @@ CH3CO 43.01839 43.0452}
        
       ["H20","H2(H2(H2))H2"].each do |formula|
         x.report("#{n}k #{formula}") do 
-          (n*1000).times { Molecule.parse(formula) }
+          (n*1000).times { EmpiricalFormula.parse(formula) }
         end
       end
     end
@@ -176,7 +176,7 @@ CH3CO 43.01839 43.0452}
        
       ["H(20)","H(2)H(2)H(2)H(2)"].each do |formula|
         x.report("#{n}k #{formula}") do 
-          (n*1000).times { Molecule.parse_simple(formula) }
+          (n*1000).times { EmpiricalFormula.parse_simple(formula) }
         end
       end
     end
