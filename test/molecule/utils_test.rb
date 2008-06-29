@@ -23,6 +23,58 @@ class UtilsTest < Test::Unit::TestCase
     assert_equal 0, round(13, -2)
   end
   
+  #
+  # add
+  #
+  
+  def test_add_adds_the_elements_of_b_to_a_at_corresponding_indicies
+    assert_equal [2,3,4], add([1,3,-1], [1,0,5])
+  end
+  
+  def test_add_multiplies_the_elements_of_b_by_factor
+    assert_equal [3,3,9], add([1,3,-1], [1,0,5], 2)
+    assert_equal [1,3,-1], add([1,3,-1], [1,0,5], 0)
+  end
+  
+  def test_add_removes_trailing_zeros_from_a
+    assert_equal [], add([1,1,1], [-1,-1,-1])
+  end
+  
+  def test_add_returns_a
+    a = [1,2,4]
+    assert_equal a.object_id, add(a, [1,0,4]).object_id
+  end
+  
+  def test_add_does_not_require_a_and_b_to_be_the_same_length
+    a = [1,2]
+    b = [1]
+    
+    assert_equal [2,2], add(a, b)
+    
+    a = [1,2]
+    b = [1]
+    
+    assert_equal [2,2], add(b, a)
+  end
+  
+  #
+  # multiply test
+  #
+  
+  def test_multiply_multiplies_elements_of_a_by_factor
+    assert_equal [2,4,-6], multiply([1,2,-3], 2)
+    assert_equal [-2,-4,6], multiply([1,2,-3], -2)
+  end
+  
+  def test_multiply_clears_a_for_zero_factor
+    assert_equal [], multiply([1,2,-3], 0)
+  end
+  
+  def test_mulitply_returns_a
+    a = [1,2,4]
+    assert_equal a.object_id, multiply(a, 2).object_id
+    assert_equal a.object_id, multiply(a, 0).object_id
+  end
   
   #
   # benchmark tests
@@ -44,4 +96,43 @@ class UtilsTest < Test::Unit::TestCase
       end
     end
   end
+  
+  def test_add_speed
+    benchmark_test(30) do |x|
+      n = 100
+      x.report("#{n}k add([1,3,-1], [1,0,5])") do 
+        (n*10**3).times { add([1,3,-1], [1,0,5]) }
+      end
+      
+      x.report("#{n}k add([1,3,-1], [1])") do 
+        (n*10**3).times { add([1,3,-1], [1]) }
+      end
+      
+      x.report("#{n}k add([1], [1,3,-1])") do 
+        (n*10**3).times { add([1], [1,3,-1]) }
+      end
+      
+      x.report("#{n}k add([1,1,1], [-1,-1,-1])") do 
+        (n*10**3).times { add([1,1,1], [-1,-1,-1]) }
+      end
+      
+      x.report("#{n}k add([1,3,-1], [1,0,5], 2)") do 
+        (n*10**3).times { add([1,3,-1], [1,0,5], 2) }
+      end
+    end
+  end
+    
+  def test_multiply_speed
+    benchmark_test(30) do |x|
+      n = 100
+      x.report("#{n}k multiply([1,3,-1], 2)") do 
+        (n*10**3).times { multiply([1,3,-1], 2) }
+      end
+      
+      x.report("#{n}k multiply([1,3,-1], 0)") do 
+        (n*10**3).times { multiply([1,3,-1], 0) }
+      end
+    end
+  end
+  
 end

@@ -6,7 +6,12 @@ module Molecules
     # A Library of amino acid residues.
     class Residue < Molecules::EmpiricalFormula
      
-      attr_reader :letter, :abbr, :name, :side_chain, :type
+      attr_reader :byte
+      attr_reader :letter
+      attr_reader :abbr
+      attr_reader :name
+      attr_reader :side_chain
+      attr_reader :type
 
       # The unrounded monoisotopic side chain mass 
       attr_reader :side_chain_mass
@@ -29,6 +34,12 @@ module Molecules
         @side_chain_mass = side_chain.mass
         @residue_mass = mass
         @immonium_ion_mass = @residue_mass + DELTA_IMMONIUM.mass
+        
+        @byte = nil
+        @letter.each_byte do |byte|
+          @byte = byte
+          break
+        end unless @letter == nil
       end
 
       # True if the residue is a common residue
@@ -99,12 +110,12 @@ module Molecules
 
       library.collect(:residue_index) do |residue|
         next unless residue.common? 
-        [residue, residue.letter[0]]
+        [residue, residue.byte]
       end
 
       library.collect(:residue_mass_index) do |residue|
         next unless residue.common? 
-        [residue.residue_mass, residue.letter[0]]
+        [residue.residue_mass, residue.byte]
       end
 
       class << self

@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'molecules_test_helper.rb') 
+require File.join(File.dirname(__FILE__), '../molecules_test_helper.rb') 
 require 'molecules/molecule'
 
 class MoleculeTest < Test::Unit::TestCase

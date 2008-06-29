@@ -6,12 +6,26 @@ module Molecules
   
   class EmpiricalFormula
     include Enumerable
+    include Utils
+    
+    # An array of all element symbols ordered roughly by their occurence
+    # in common biological molecules (ex water, carbohydrates, proteins).  
+    ELEMENT_INDEX_ORDER = ['H', 'O', 'C', 'N', 'S', 'P', 'Fe', 'Ni', 'Se']
+    
+    # An array of all elements ordered as in ELEMENT_INDEX_ORDER
+    ELEMENT_INDEX = Element.library.collect :element_index do |e|
+      unless ELEMENT_INDEX_ORDER.include?(e.symbol)
+        ELEMENT_INDEX_ORDER << e.symbol
+      end
+      
+      [e, ELEMENT_INDEX_ORDER.index(e.symbol)]
+    end
     
     # An array defining the number of a given element in the formula.  The
-    # order of elements in Element.index correspond to order of forumula,
-    # such that formula[1] indicates the number of Element.index[1] elements
+    # order of elements in ELEMENT_INDEX correspond to order of forumula,
+    # such that formula[1] indicates the number of ELEMENT_INDEX[1] elements
     # in self.
-    attr_accessor :formula
+    attr_reader :formula
 
     def initialize(formula=[], normalize=true)
       @formula = formula
@@ -22,23 +36,23 @@ module Molecules
         @formula.pop while @formula.last == 0
       end
 
-      # ensure the formula aren't going to get changed
+      # ensure the formula cannot be changed
       @formula.freeze
     end
 
     # Returns a new EmpiricalFormula summing the formula of another and self.
     def +(another)
-      EmpiricalFormula.new Utils.add(self.formula.dup, another.formula), false
+      EmpiricalFormula.new(add(self.formula.dup, another.formula), false)
     end
 
     # Returns a new EmpiricalFormula subtracting the formula of another from self.
     def -(another)
-      EmpiricalFormula.new Utils.add(self.formula.dup, another.formula, -1), false
+      EmpiricalFormula.new(add(self.formula.dup, another.formula, -1), false)
     end
 
     # Returns a new EmpiricalFormula multiplying the formula of self by factor.
     def *(factor)
-      EmpiricalFormula.new Utils.multiply(self.formula.dup, factor), false
+      EmpiricalFormula.new(multiply(self.formula.dup, factor), false)
     end
 
     # True if another is an EmpiricalFormula and the formula of another equals the formula of self.
@@ -46,6 +60,43 @@ module Molecules
       another.kind_of?(EmpiricalFormula) && self.formula == another.formula
     end
 
+    # Yields each element and the number of times that element occurs in self.
+    def each # :yields: element, n
+      formula.each_with_index do |n, index|
+        next if n == 0
+        yield(ELEMENT_INDEX[index], n)
+      end
+    end
+
+    # Returns a formula string formatted like 'H(2)O' with the 
+    # elements are sorted alphabetically by symbol.
+    def to_s
+      collect do |element, n|
+        element.symbol + (n == 1 ? "" : "(#{n})")
+      end.sort.join('')
+    end
+    
+    # Calculates and returns the mass of self using the element
+    # masses returned by the block. Returns the monoisotopic mass 
+    # for the formula (ie the mass calculated from the most abundant 
+    # natural isotope of each element) if no block is given.
+    #
+    #   water = EmpiricalFormula.new [2,1]
+    #
+    #   # monoisotopic mass calculation
+    #   water.mass                                    # => 18.0105646863
+    #   water.mass {|e| e.mass }                      # => 18.0105646863 
+    #   
+    #   # average mass calculation
+    #   water.mass {|e| e.std_atomic_weight.value }   # => 18.01528
+    #
+    # ==== Note
+    #
+    # The definition of monoisotopic mass conforms to
+    # that presented in 'Standard Definitions of Terms Relating 
+    # to Mass Spectrometry, Phil. Price, J. Am. Soc. Mass 
+    # Spectrom. (1991) 2 336-348' 
+    # (see {Unimod Mass Help}[http://www.unimod.org/masses.html])
     def mass(&block)
       if block_given? 
         mass = 0
@@ -54,21 +105,6 @@ module Molecules
       else
         @monoisotopic_mass ||= mass {|e| e.mass}
       end
-    end
-
-    # Yields each element and the number of times that element occurs in self.
-    def each # :yields: element, n
-      formula.each_with_index do |n, index|
-        next if n == 0
-        yield(Element::INDEX[index], n)
-      end
-    end
-
-    # Returns a formula string formatted like: 'H(2)O'
-    def to_s
-      collect do |element, n|
-        element.symbol + (n == 1 ? "" : "(#{n})")
-      end.sort.join('')
     end
 
   end

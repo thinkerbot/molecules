@@ -22,12 +22,12 @@ module Molecules
       composition.each_pair do |symbol, factor|
         next if factor == 0
 
-        element = symbol.kind_of?(Element) ? symbol : Element[symbol]
+        element = symbol.kind_of?(Element) ? symbol : Element.index(:symbol)[symbol]
         if element == nil
           raise UnknownElementError.new("unknown element: #{symbol}")
         end
 
-        factors[element.index] = factor
+        factors[EmpiricalFormula::ELEMENT_INDEX.index(element)] = factor
       end
       factors
     end
