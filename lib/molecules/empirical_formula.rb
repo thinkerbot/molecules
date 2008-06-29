@@ -24,33 +24,15 @@ module Molecules
   #
   class EmpiricalFormula
     class << self
-      def [](identifier)
-        parse(identifier)
-      end 
-
-      def composition_to_factors(composition)
-        factors = []
-        composition.each_pair do |symbol, factor|
-          next if factor == 0
-
-          element = symbol.kind_of?(Element) ? symbol : Element.index(:symbol)[symbol]
-          if element == nil
-            raise UnknownElementError.new("unknown element: #{symbol}")
-          end
-
-          factors[ELEMENT_INDEX.index(element)] = factor
-        end
-        factors
-      end
 
       # Parses a simple formula (formatted like those returned by 
-      # Composition#to_s) into a Composition. The format consists of the 
-      # element symbol followed by parenthesis with the number of that 
-      # element in the composition.  Whitespace is allowed in the formula.
+      # EmpiricalFormula#to_s) into a EmpiricalFormula. Whitespace 
+      # is allowed in the formula.
       # 
-      #   parse("H(2)O").to_s                   # => "H(2)O"
-      #   parse("H (2) O").to_s                 # => "H(2)O"
-      #   parse("HO(-1)O(2)H").to_s             # => "H(2)O"
+      #   EmpiricalFormula.parse("H(2)O").to_s           # => "H(2)O"
+      #   EmpiricalFormula.parse("H (2) O").to_s         # => "H(2)O"
+      #   EmpiricalFormula.parse("HO(-1)O(2)H").to_s     # => "H(2)O"
+      #
       def parse_simple(chemical_formula)
         formula = chemical_formula.to_s.gsub(/\s+/, "")
 
@@ -76,16 +58,16 @@ module Molecules
         block_given? ? yield(factors) : EmpiricalFormula.new(factors)
       end
 
-      # Parses a generalized chemical formula into a Composition.
+      # Parses a generalized chemical formula into an EmpiricalFormula.
       # Formula sections can be nested with parenthesis, and multiple
-      # sections can be added or subtracted within the formula.  Note
-      # that the format for Composition#to_s differs from the format
-      # that parse utilizes.
+      # sections can be added or subtracted within the formula.  
       #
-      #   parse("H2O").to_s                   # => "H(2)O"
-      #   parse("CH3(CH2)50CH3").to_s         # => "C(52)H(106)"
-      #   parse("C2H3NO - H2O + NH3").to_s    # => "C(2)H(4)N(2)"
+      #   EmpiricalFormula.parse("H2O").to_s                   # => "H(2)O"
+      #   EmpiricalFormula.parse("CH3(CH2)50CH3").to_s         # => "C(52)H(106)"
+      #   EmpiricalFormula.parse("C2H3NO - H2O + NH3").to_s    # => "C(2)H(4)N(2)"
       #
+      # Note that the format for EmpiricalFormula#to_s differs from the 
+      # format that parse utilizes.
       def parse(chemical_formula)
         # Remove whitespace 
         formula = chemical_formula.to_s.gsub(/\s+/, "")
@@ -181,12 +163,32 @@ module Molecules
         block_given? ? yield(factors) : EmpiricalFormula.new(factors)
       end
 
-      # Parses the input formula into an EmpiricalFormula (using
-      # parse) then calculates the mass therefrom.  By default
-      # the mass will be the monoisotopic mass of the formula;
-      # see EmpericalFormula#mass for more details.
+      # Parses the input formula into an EmpiricalFormula and 
+      # calculates the mass therefrom.  By default the mass 
+      # will be the monoisotopic mass of the formula.
+      #
+      # See EmpericalFormula#mass for more details.
       def mass(formula, &block) # :yields: element
         mass = parse(formula).mass(&block)
+      end
+      
+      protected
+      
+      # Converts a hash of (symbol, factor) pairs into a factors array,
+      # suitable for initializing an EmpiricalFormula.
+      def composition_to_factors(composition)
+        factors = []
+        composition.each_pair do |symbol, factor|
+          next if factor == 0
+
+          element = symbol.kind_of?(Element) ? symbol : Element.index(:symbol)[symbol]
+          if element == nil
+            raise UnknownElementError.new("unknown element: #{symbol}")
+          end
+
+          factors[ELEMENT_INDEX.index(element)] = factor
+        end
+        factors
       end
     end
     
