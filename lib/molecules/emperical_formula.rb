@@ -4,6 +4,23 @@ require 'molecules/utils'
 module Molecules
   Element = Constants::Libraries::Element
   
+  # EmpiricalFormula represents the empirical formula (ex 'H(2)0') for
+  # a molecule.  The formula is stored as an array of integers aligned
+  # to the elements in EmpiricalFormula::ELEMENT_INDEX.  Hence:
+  #
+  #   EmpiricalFormula::ELEMENT_INDEX[0].name   # => "Hydrogen"
+  #   EmpiricalFormula::ELEMENT_INDEX[1].name   # => "Oxygen"
+  #
+  #   water = EmpiricalFormula.new [2,1]
+  #   water.to_s                                # => 'H(2)O'
+  #   water.mass                                # => 18.0105646863
+  #
+  # EmpiricalFormula may be added, subtracted, and multiplied to
+  # perform the expected operations:
+  #
+  #   alanine = EmpiricalFormula.new [5,1,3,1]
+  #   (alanine - water).formula                 # => [3,0,3,1]
+  #
   class EmpiricalFormula
     include Enumerable
     include Utils
@@ -90,17 +107,19 @@ module Molecules
     #   # average mass calculation
     #   water.mass {|e| e.std_atomic_weight.value }   # => 18.01528
     #
-    # ==== Note
-    #
-    # The definition of monoisotopic mass conforms to
+    # ==== Notes
+    # - The definition of monoisotopic mass conforms to
     # that presented in 'Standard Definitions of Terms Relating 
     # to Mass Spectrometry, Phil. Price, J. Am. Soc. Mass 
     # Spectrom. (1991) 2 336-348' 
     # (see {Unimod Mass Help}[http://www.unimod.org/masses.html])
+    # - Masses are calculated such that mathematical operations 
+    # are performed on the return of the block.
+    # 
     def mass(&block)
       if block_given? 
         mass = 0
-        each {|e, n| mass += n * yield(e)}
+        each {|e, n| mass = (yield(e) * n) + mass }
         mass
       else
         @monoisotopic_mass ||= mass {|e| e.mass}

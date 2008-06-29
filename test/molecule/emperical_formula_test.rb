@@ -5,6 +5,22 @@ class EmpiricalFormulaTest < Test::Unit::TestCase
   include Molecules
   
   #
+  # documentation test
+  #
+  
+  def test_documentation
+    assert_equal "Hydrogen", EmpiricalFormula::ELEMENT_INDEX[0].name
+    assert_equal "Oxygen", EmpiricalFormula::ELEMENT_INDEX[1].name
+  
+    water = EmpiricalFormula.new [2,1]
+    assert_equal 'H(2)O', water.to_s
+    assert_equal 18.0105646863, water.mass 
+    
+    alanine = EmpiricalFormula.new [5,1,3,1]
+    assert_equal [3,0,3,1], (alanine - water).formula
+  end
+  
+  #
   # initialize test
   #
   
@@ -123,6 +139,42 @@ class EmpiricalFormulaTest < Test::Unit::TestCase
     assert_equal 18.01528, water.mass {|e| e.std_atomic_weight.value }
   end
   
+  def test_mass_returns_monoisotopic_mass_if_no_block_is_given
+    water = EmpiricalFormula.new [2,1]
+    assert_equal 18.0105646863, water.mass
+  end
+  
+  def test_mass_calculates_mass_using_block_result
+    water = EmpiricalFormula.new [2,1]
+    assert_equal 18.01528, water.mass {|e| e.std_atomic_weight.value }
+  end
+  
+  class AltMass 
+    attr_reader :value
+    
+    def initialize(value)
+      @value = value
+    end
+    
+    def +(another)
+      another = another.value if another.kind_of?(AltMass)
+      AltMass.new @value + another
+    end
+    
+    def *(another)
+      another = another.value if another.kind_of?(AltMass)
+      AltMass.new @value * another
+    end
+  end
+  
+  def test_mass_calculation_operates_on_block_result
+    water = EmpiricalFormula.new [2,1]
+    result = water.mass {|e| AltMass.new e.mass }
+    
+    assert result.kind_of?(AltMass)
+    assert_equal 18.0105646863, result.value
+  end
+  
   #
   # benchmark
   #
@@ -145,8 +197,8 @@ class EmpiricalFormulaTest < Test::Unit::TestCase
       a = EmpiricalFormula.new [1,2,3,4]
       b = EmpiricalFormula.new [0,-1]
       
-      x.report("[1,2,3,4] mass") { (n*1000).times { a.mass {|e| e.mass } } }
-      x.report("[0,-1] mass") { (n*1000).times { b.mass {|e| e.mass } } }
+      x.report("#{n}k [1,2,3,4] mass") { (n*1000).times { a.mass {|e| e.mass } } }
+      x.report("#{n}k [0,-1] mass") { (n*1000).times { b.mass {|e| e.mass } } }
     end
   end
 end
