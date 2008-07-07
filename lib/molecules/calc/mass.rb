@@ -1,5 +1,12 @@
 require 'molecules/empirical_formula'
 
+# patch for ruby units
+class Unit < Numeric
+  UNIT_DEFINITIONS['<AMU>'] = [%w{u AMU amu}, 1/6.0221415e26, :mass, %w{<kilogram>}]
+  UNIT_DEFINITIONS['<dalton>'] = [%w{Da Dalton Daltons dalton daltons}, 1/6.0221415e26, :mass, %w{<kilogram>}]
+end
+Unit.setup
+
 module Molecules
   module Calc
     
@@ -19,9 +26,9 @@ module Molecules
     #
     class Mass < Tap::Task
     
-      config :type, :monoisotopic
-      config :precision, nil
-      #config :units, :Da
+      config :type, :monoisotopic    # the mass type calculated
+      config :precision, nil              # the precision of the mass
+      config :units, "Da"                 # the mass unit reported
 
       def process(*formulae)
         formulae.collect do |formula|
@@ -29,10 +36,14 @@ module Molecules
             case type
             when :monoisotopic then element.mass
             when :average then element.std_atomic_weight.value
+            else raise "unknown mass type: #{type}"
             end
           end
           
-          mass = (precision == nil ? mass : Utils.round(mass, precision))
+          mass = Unit.new(mass, "Da").convert_to(units)
+          unless precision == nil
+            mass = Unit.new( Utils.round(mass.scalar, precision), units) 
+          end
           
           log mass, formula
           mass
