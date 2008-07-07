@@ -16,7 +16,7 @@ class Molecules::Calc::MassTest < Test::Unit::TestCase
       t.enq("H2O")
       app.run
       
-      assert_equal [[18.0105646863]], app.results(t)
+      assert_equal [[Unit.new(18.0105646863, "Da")]], app.results(t)
     end
   end
   
@@ -26,8 +26,18 @@ class Molecules::Calc::MassTest < Test::Unit::TestCase
       t.enq("H2O", "NH3 + H2O")
       app.run
       
-      assert_equal [[18.01, 35.04]], app.results(t)
+      assert_equal [[Unit.new(18.01, "Da"), Unit.new(35.04, "Da")]], app.results(t)
     end
   end
   
+  def test_mass_calculation_with_precision_and_unit_conversion
+    with_options(:quiet => true, :debug => true) do 
+      t.units = "yg"
+      t.precision = 3
+      t.enq("H2O")
+      app.run
+      
+      assert_equal [[Unit.new(29.907, "yg")]], app.results(t)
+    end
+  end
 end
