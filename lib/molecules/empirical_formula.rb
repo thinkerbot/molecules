@@ -68,7 +68,7 @@ module Molecules
       #
       # Note that the format for EmpiricalFormula#to_s differs from the 
       # format that parse utilizes.
-      def parse(chemical_formula)
+      def parse(chemical_formula, &block)
         # Remove whitespace 
         formula = chemical_formula.to_s.gsub(/\s+/, "")
 
@@ -76,15 +76,18 @@ module Molecules
         case formula 
         when /\+/
           return formula.split(/\+/).inject(EmpiricalFormula.new) do |current, formula|
-            current + parse(formula)
+            current + parse(formula, &block)
           end
         when /-/
           splits = formula.split(/-/)
-          first = parse(splits.shift)
+          first = parse(splits.shift, &block)
           return splits.inject(first) do |current, formula|
-            current - parse(formula)
+            current - parse(formula, &block)
           end
         when /[^A-Za-z0-9\\(\\)]/
+          result = block_given? ? yield(formula) : nil
+          return result unless result == nil
+          
           raise ParseError.new("unexpected characters in formula: #{chemical_formula}")
         end
 
@@ -159,8 +162,7 @@ module Molecules
         raise ParseError.new("the formula contains mismatched parenthesis: #{chemical_formula}") unless multiplier.length == 1
         raise ParseError.new("no elements could be found in the formula: #{chemical_formula}") if composition.length == 0 && !formula.empty?
 
-        factors = composition_to_factors(composition)
-        block_given? ? yield(factors) : EmpiricalFormula.new(factors)
+        EmpiricalFormula.new(composition_to_factors(composition))
       end
 
       # Parses the input formula into an EmpiricalFormula and 
