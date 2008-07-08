@@ -1,14 +1,14 @@
-require File.join(File.dirname(__FILE__), '../../tap_test_helper.rb') 
-require 'molecules/calc/mass'
+require File.join(File.dirname(__FILE__), '../tap_test_helper.rb') 
+require 'molecules/calc'
 
-class Molecules::Calc::MassTest < Test::Unit::TestCase
+class Molecules::CalcTest < Test::Unit::TestCase
   acts_as_tap_test 
   
   attr_reader :t
   
   def setup
     super
-    @t = Molecules::Calc::Mass.new
+    @t = Molecules::Calc.new
   end
   
   def test_mass_calculation

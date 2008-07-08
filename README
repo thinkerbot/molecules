@@ -4,14 +4,67 @@ A library of molecules for scientific calculations in Ruby.
 
 == Description
 
+Molecules provides libraries of commonly used molecules, currently just amino
+acid residues and polypeptides.  Molecules all inherit from EmpiricalFormula
+which allows calculation of molecular composition and mass, and facilitates
+adding/subtracting molecules.
+
+I have attempted to use reputable sources and adhere to standards when 
+applicable.  Please notify me of any errors and send me suggestions for other 
+molecules/molecular information to include.
+
 * Rubyforge[http://rubyforge.org/projects/bioactive]
 * Lighthouse[http://bahuvrihi.lighthouseapp.com/projects/13518-molecules/overview]
 * Github[http://github.com/bahuvrihi/molecules/tree/master]
 
 == Usage
 
+  require 'molecules'
+  include Molecules::Libraries
+  
+  # Residue predefines all common amino acids
+  # as well as some uncommon ones.
+  r = Residue::A
+  r.name               # => "Alanine"
+  r.abbr               # => "Ala"
+  r.letter             # => "A"
+  r.side_chain.to_s    # => "CH(3)"
+  r.mass               # => 71.03711
+  r.immonium_ion_mass  # => 44.0500
+  
+  # Polypeptide allows for creation of polypeptides
+  # from residue sequences.
+  p = Polypeptide.new("RPPGFSPFR")
+  p.to_s               # => "C(50)H(71)N(15)O(10)"
+  p.mass               # => 1041.5508(3)
+  
+  # Generic molecules may be specified with EmpiricalFormula.
+  caffeine = Molecules::EmpiricalFormula.parse("C8H10N4O2")
+  coffee = Molecules::EmpiricalFormula.parse("C8H10N4O2 + H2O")
+
+--
+=== Mass Calculator (tap task)
+
+Molecules provides a mass calculator tap task.  Tap[http://tap.rubyforge.org] 
+is not required by molecules in general, but you get this bonus if you have tap
+installed:
+
+  % tap -- molecules/calc ":RPPGFSPFR + H2O"
+  ctl-c interupts execution
+  beginning run...
+    I[15:34:30]         1077.57 Da :RPPGFSPFR + H2O
+++
+
 == Known Issues
 
+* Polypeptide only allows common residues
+* No 'Molecule' class is defined, pending the potential addition
+  of more molecule data than the empirical formula (ex: 
+  SMILES[http://en.wikipedia.org/wiki/Simplified_molecular_input_line_entry_specification]
+  data)
+* No mechanism for including large libraries of molecules has been
+  defined.  Databases may be adopted to this end.
+  
 == Installation
 
 Constants is available as a gem through GitHub[http://github.com/bahuvrihi/molecules/tree/master].  Use:

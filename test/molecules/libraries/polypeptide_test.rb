@@ -1,8 +1,7 @@
-require File.join(File.dirname(__FILE__), '../molecules_test_helper.rb') 
-require 'molecules/polypeptide'
+require File.join(File.dirname(__FILE__), '../../molecules_test_helper.rb') 
+require 'molecules/libraries/polypeptide'
 
 class PolypeptideTest < Test::Unit::TestCase
-  include Molecules
   include Molecules::Libraries
   
   #
