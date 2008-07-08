@@ -4,14 +4,13 @@ A library of molecules for scientific calculations in Ruby.
 
 == Description
 
-Molecules provides libraries of commonly used molecules, currently just amino
-acid residues and polypeptides.  Molecules all inherit from EmpiricalFormula
-which allows calculation of molecular composition and mass, and facilitates
-adding/subtracting molecules.
+Molecules provides libraries of commonly used molecules (currently just amino
+acid residues and polypeptides).  Library classes inherit from EmpiricalFormula
+which allows calculation of molecular composition and mass, as well as
+adding/subtraction of other molecules.
 
-I have attempted to use reputable sources and adhere to standards when 
-applicable.  Please notify me of any errors and send me suggestions for other 
-molecules/molecular information to include.
+I have attempted to use reputable sources and to adhere to standards when 
+applicable.  Please notify me of any errors and send me suggestions!
 
 * Rubyforge[http://rubyforge.org/projects/bioactive]
 * Lighthouse[http://bahuvrihi.lighthouseapp.com/projects/13518-molecules/overview]
@@ -59,15 +58,14 @@ installed:
 
 * Polypeptide only allows common residues
 * No 'Molecule' class is defined, pending the potential addition
-  of more molecule data than the empirical formula (ex: 
-  SMILES[http://en.wikipedia.org/wiki/Simplified_molecular_input_line_entry_specification]
+  of more molecule data (ex: SMILES[http://en.wikipedia.org/wiki/Simplified_molecular_input_line_entry_specification]
   data)
-* No mechanism for including large libraries of molecules has been
-  defined.  Databases may be adopted to this end.
+* No mechanism for defining large libraries of molecules has been
+  chosen.  A database solution may be adopted to this end.
   
 == Installation
 
-Constants is available as a gem through GitHub[http://github.com/bahuvrihi/molecules/tree/master].  Use:
+Molecules is available as a gem through GitHub[http://github.com/bahuvrihi/molecules/tree/master].  Use:
 
   % gem install bahuvrihi-molecules --source=http://gems.github.com
 

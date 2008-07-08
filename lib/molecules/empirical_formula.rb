@@ -220,20 +220,7 @@ module Molecules
     
     include Enumerable
     include Utils
-    
-    # An array of all element symbols ordered roughly by their occurence
-    # in common biological molecules (ex water, carbohydrates, proteins).  
-    ELEMENT_INDEX_ORDER = ['H', 'O', 'C', 'N', 'S', 'P', 'Fe', 'Ni', 'Se']
-    
-    # An array of all elements ordered as in ELEMENT_INDEX_ORDER
-    ELEMENT_INDEX = Element.library.collect :element_index do |e|
-      unless ELEMENT_INDEX_ORDER.include?(e.symbol)
-        ELEMENT_INDEX_ORDER << e.symbol
-      end
-      
-      [e, ELEMENT_INDEX_ORDER.index(e.symbol)]
-    end
-    
+
     # An array defining the number of a given element in the formula.  The
     # order of elements in ELEMENT_INDEX correspond to order of forumula,
     # such that formula[1] indicates the number of ELEMENT_INDEX[1] elements
@@ -305,12 +292,12 @@ module Molecules
     #
     # ==== Notes
     # - The definition of monoisotopic mass conforms to
-    # that presented in 'Standard Definitions of Terms Relating 
-    # to Mass Spectrometry, Phil. Price, J. Am. Soc. Mass 
-    # Spectrom. (1991) 2 336-348' 
-    # (see {Unimod Mass Help}[http://www.unimod.org/masses.html])
+    #   that presented in 'Standard Definitions of Terms Relating 
+    #   to Mass Spectrometry, Phil. Price, J. Am. Soc. Mass 
+    #   Spectrom. (1991) 2 336-348' 
+    #   (see {Unimod Mass Help}[http://www.unimod.org/masses.html])
     # - Masses are calculated such that mathematical operations 
-    # are performed on the return of the block.
+    #   are performed on the return of the block.
     # 
     def mass(&block)
       if block_given? 
@@ -321,6 +308,18 @@ module Molecules
         @monoisotopic_mass ||= mass {|e| e.mass}
       end
     end
-
+    
+    # An array of all element symbols ordered roughly by their occurence
+    # in common biological molecules (ex water, carbohydrates, proteins).  
+    ELEMENT_INDEX_ORDER = ['H', 'O', 'C', 'N', 'S', 'P', 'Fe', 'Ni', 'Se']
+    
+    # An array of all elements ordered as in ELEMENT_INDEX_ORDER
+    ELEMENT_INDEX = Element.library.collect :element_index do |e|
+      unless ELEMENT_INDEX_ORDER.include?(e.symbol)
+        ELEMENT_INDEX_ORDER << e.symbol
+      end
+      
+      [e, ELEMENT_INDEX_ORDER.index(e.symbol)]
+    end
   end
 end

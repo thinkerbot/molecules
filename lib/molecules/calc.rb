@@ -2,7 +2,7 @@ require 'molecules/empirical_formula'
 require 'molecules/libraries/polypeptide'
 
 # patch for ruby units
-class Unit < Numeric
+class Unit < Numeric # :nodoc:
   UNIT_DEFINITIONS['<AMU>'] = [%w{u AMU amu}, 1/6.0221415e26, :mass, %w{<kilogram>}]
   UNIT_DEFINITIONS['<dalton>'] = [%w{Da Dalton Daltons dalton daltons}, 1/6.0221415e26, :mass, %w{<kilogram>}]
 end
@@ -10,7 +10,7 @@ Unit.setup
 
 module Molecules
 
-  # :manifest: a mass calculator
+  # ::manifest a mass calculator
   # Calculates the mass of a molecule or empirical formula.  The
   # options can be used to alter the output (precision, mass
   # calculation method etc.)
@@ -24,7 +24,7 @@ module Molecules
   #     I[17:08:21]              89.05 C3H5NO + H2O
   #     I[17:08:21]            1059.56 C50H73N15O11
   #
-  class Calc < Tap::Task
+  class Calc < Tap::Task # :nodoc:
   
     config :type, :monoisotopic              # the mass type calculated
     config :precision, nil                   # the precision of the mass

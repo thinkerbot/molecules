@@ -16,10 +16,7 @@ module Molecules
           sequence.gsub(/\s/, "").upcase
         end
       end
-      
-      class UnknownResidueError < StandardError # :nodoc:
-      end
-      
+
       # The sequence of self (including whitespace)
       attr_reader :sequence
       
@@ -85,6 +82,10 @@ module Molecules
           yield(residue) if residue
         end
       end
+      
+      class UnknownResidueError < StandardError # :nodoc:
+      end
+      
     end  
   end
 end
