@@ -43,6 +43,18 @@ class EmpiricalFormulaClassTest < Test::Unit::TestCase
     assert_equal "H(2)O", EmpiricalFormula.parse("H2O").to_s
     assert_equal "C(52)H(106)", EmpiricalFormula.parse("CH3(CH2)50CH3").to_s 
     assert_equal "C(2)H(4)N(2)", EmpiricalFormula.parse("C2H3NO - H2O + NH3").to_s 
+    
+    block = lambda do |formula|
+      case formula
+      when /\[(.*)\]/
+        factors = $1.split(/,/).collect {|i| i.strip.to_i }
+        EmpiricalFormula.new(factors)
+      else nil
+      end
+    end
+    
+    assert_equal  "H(4)O(2)", EmpiricalFormula.parse("H2O + [2, 1]", &block).to_s
+    assert_raise(EmpiricalFormula::ParseError) { EmpiricalFormula.parse("H2O + :not_expected", &block) }
   end
   
   def test_parse

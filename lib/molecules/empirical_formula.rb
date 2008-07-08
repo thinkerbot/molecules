@@ -68,6 +68,24 @@ module Molecules
       #
       # Note that the format for EmpiricalFormula#to_s differs from the 
       # format that parse utilizes.
+      #
+      # To extend the functionality of parse, provide a block to receive
+      # formula sections with unexpected punctuation and calculate an 
+      # EmpiricalFormula therefrom.  If the block returns nil, 
+      # then parse will raise an error.
+      #
+      #   block = lambda do |formula|
+      #     case formula
+      #     when /\[(.*)\]/
+      #       factors = $1.split(/,/).collect {|i| i.strip.to_i }
+      #       EmpiricalFormula.new(factors)
+      #     else nil
+      #     end
+      #   end
+      #
+      #   EmpiricalFormula.parse("H2O + [2, 1]", &block).to_s   # => "H(4)O(2)"
+      #   EmpiricalFormula.parse("H2O + :not_expected", &block) # !> ParseError
+      #
       def parse(chemical_formula, &block)
         # Remove whitespace 
         formula = chemical_formula.to_s.gsub(/\s+/, "")

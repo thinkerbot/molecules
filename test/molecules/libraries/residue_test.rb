@@ -4,6 +4,18 @@ require 'molecules/libraries/residue'
 class ResidueTest < Test::Unit::TestCase
   include Molecules::Libraries
 
+  #
+  # documentation test
+  #
+  
+  def test_documentation
+    r = Residue::A
+    assert_equal "Alanine", r.name
+    assert_equal "Ala", r.abbr
+    assert_equal "A", r.letter
+    assert_equal "CH(3)", r.side_chain.to_s
+  end
+  
   def test_common_returns_array_of_common_residues
     assert_equal 20, Residue.common.length
     assert_equal ['A', 'R', 'N', 'D', 'C', 'E', 'Q', 'G', 'H', 'I', 'L', 'K', 'M', 'F', 'P', 'S', 'T', 'W', 'Y', 'V'].sort, Residue.common.collect {|e| e.letter}.sort
@@ -41,12 +53,12 @@ class ResidueTest < Test::Unit::TestCase
       'L' => 113.08406,
       'K' => 128.09496,
       'M' => 131.04049,
-      'O' => 114.07931,
+      'O' => 211.14465,
       'F' => 147.06841,
       'P' => 97.05276,
       'S' => 87.03203,
       'T' => 101.04768,
-      #'U' => 168.053,
+      'U' => 150.95363,
       'W' => 186.07931,
       'Y' => 163.06333,
       'V' => 99.06841
@@ -70,12 +82,12 @@ class ResidueTest < Test::Unit::TestCase
       'L' => 86.09697,
       'K' => 101.10787,
       'M' => 104.05340,
-      'O' => 87.09222,
+      'O' => 184.15756,
       'F' => 120.08132,
       'P' => 70.06567,
       'S' => 60.04494,
       'T' => 74.06059,
-      #'U' => 
+      'U' => 123.96654,
       'W' => 159.09222,
       'Y' => 136.07624,
       'V' => 72.08132

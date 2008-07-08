@@ -55,12 +55,12 @@ class PolypeptideTest < Test::Unit::TestCase
 
   def test_initialize_raises_error_for_unknown_residues
     assert_nil Residue['Z']
-    assert_raise(RuntimeError) { Polypeptide.new("Z") }
+    assert_raise(Polypeptide::UnknownResidueError) { Polypeptide.new("Z") }
   end
 
   def test_initialize_is_case_sensitive_for_residues
     assert_not_nil Residue['A']
-    assert_raise(RuntimeError) { Polypeptide.new("a") }
+    assert_raise(Polypeptide::UnknownResidueError) { Polypeptide.new("a") }
   end
 
   #
@@ -107,4 +107,23 @@ class PolypeptideTest < Test::Unit::TestCase
       end
     end
   end
+  
+  #def test_counting_vs_each_byte
+  #  benchmark_test(20) do |x|
+  #    sequence = "RPPGFSPFR" * 1000
+  #    
+  #    x.report("1k count") do 
+  #      1000.times do 
+  #        Utils.count(sequence, Polypeptide::SEQUENCE_TOKENS)
+  #      end
+  #    end
+  #    
+  #    x.report("1k each_byte") do 
+  #      1000.times do
+  #        array = Array.new(100, 0)
+  #        sequence.each_byte {|b| array[b] += 1}
+  #      end
+  #    end
+  #  end
+  #end
 end

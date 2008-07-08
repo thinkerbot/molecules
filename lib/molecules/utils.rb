@@ -1,8 +1,8 @@
 module Molecules
 
-  # A number of utility routines used by EmpiricalFormula (and elsewhere).
+  # A number of utility routines used by EmpiricalFormula and elsewhere.
   # These methods are used a great deal and are all prime candidates for 
-  # optimization using RubyInline.
+  # optimization (for example using RubyInline).
   module Utils
     module_function
     
@@ -35,7 +35,12 @@ module Molecules
     def multiply(a, factor)
       factor == 0 ? a.clear : a.collect! {|i| i * factor}
     end
-
+    
+    # Collects the number of each of the patterns in str.  For example:
+    #
+    #   count("abcabca", ["a", "b", "c"])  # => [3, 2, 2]
+    #   count("abcabca", ["a", "bc"])      # => [3, 4]
+    #
     def count(str, patterns)
       patterns.collect {|pattern| str.count(pattern)}
     end

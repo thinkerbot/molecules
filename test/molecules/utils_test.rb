@@ -77,6 +77,15 @@ class UtilsTest < Test::Unit::TestCase
   end
   
   #
+  # count test
+  #
+  
+  def test_count_documenation
+    assert_equal [3, 2, 2] , count("abcabca", ["a", "b", "c"])
+    assert_equal [3, 4], count("abcabca", ["a", "bc"])
+  end
+  
+  #
   # benchmark tests
   #
   
