@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "bioactive"
   s.require_path = "lib"
   s.add_dependency("bahuvrihi-constants", ">=0.1.0")
-  
 	s.test_file = "test/molecules_test_suite.rb"
 	s.has_rdoc = true
   s.extra_rdoc_files = %w{
