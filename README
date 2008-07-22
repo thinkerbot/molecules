@@ -35,7 +35,7 @@ applicable.  Please notify me of any errors and send me suggestions!
   # from residue sequences.
   p = Polypeptide.new("RPPGFSPFR")
   p.to_s               # => "C(50)H(71)N(15)O(10)"
-  p.mass               # => 1041.5508(3)
+  p.mass               # => 1041.5508
   
   # Generic molecules may be specified with EmpiricalFormula.
   caffeine = Molecules::EmpiricalFormula.parse("C8H10N4O2")
