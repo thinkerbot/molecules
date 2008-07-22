@@ -41,7 +41,6 @@ applicable.  Please notify me of any errors and send me suggestions!
   caffeine = Molecules::EmpiricalFormula.parse("C8H10N4O2")
   coffee = Molecules::EmpiricalFormula.parse("C8H10N4O2 + H2O")
 
---
 === Mass Calculator (tap task)
 
 Molecules provides a mass calculator tap task.  Tap[http://tap.rubyforge.org] 
@@ -49,10 +48,7 @@ is not required by molecules in general, but you get this bonus if you have tap
 installed:
 
   % tap -- molecules/calc ":RPPGFSPFR + H2O"
-  ctl-c interupts execution
-  beginning run...
     I[15:34:30]         1077.57 Da :RPPGFSPFR + H2O
-++
 
 == Known Issues
 

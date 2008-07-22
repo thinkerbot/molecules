@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name = "molecules"
-	s.version = "0.1.0"
+	s.version = "0.1.1"
 	s.author = "Simon Chiang"
 	s.email = "simon.a.chiang@gmail.com"
 	s.homepage = "http://bioactive.rubyforge.org/molecules/"
@@ -21,11 +21,13 @@ Gem::Specification.new do |s|
     Rakefile
     README
     lib/molecules.rb
+    lib/molecules/calc.rb
     lib/molecules/empirical_formula.rb
     lib/molecules/libraries/polypeptide.rb
     lib/molecules/libraries/residue.rb
     lib/molecules/utils.rb
     tap.yml
+    test/molecules/calc_test.rb
     test/molecules/empirical_formula_class_test.rb
     test/molecules/empirical_formula_test.rb
     test/molecules/libraries/polypeptide_test.rb
