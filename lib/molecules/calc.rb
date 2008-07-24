@@ -80,7 +80,7 @@ module Molecules
       db.close
       
       case results.length
-      when 1 then EmpiricalFormula.parse_simple(results[1])
+      when 1 then EmpiricalFormula.parse_simple(results[0][1])
       when 0 then raise "could not find modification: #{code_name}"
       else raise "multiple modifications found for: #{code_name} (#{results.collect {|result| result[0]}.join(', ')})"
       end
