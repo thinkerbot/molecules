@@ -61,9 +61,9 @@ installed:
   
 == Installation
 
-Molecules is available as a gem through GitHub[http://github.com/bahuvrihi/molecules/tree/master].  Use:
+Molecules is available as a gem through RubyForge[http://rubyforge.org/projects/bioactive].  Use:
 
-  % gem install bahuvrihi-molecules --source=http://gems.github.com
+  % gem install molecules
 
 == Info 
 
