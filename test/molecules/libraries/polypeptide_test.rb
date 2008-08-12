@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '../../molecules_test_helper.rb') 
+require File.expand_path( File.join(File.dirname(__FILE__), '../../molecules_test_helper.rb') )
 require 'molecules/libraries/polypeptide'
 
 class PolypeptideTest < Test::Unit::TestCase

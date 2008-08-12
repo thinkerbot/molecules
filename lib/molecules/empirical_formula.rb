@@ -39,7 +39,7 @@ module Molecules
         factor = nil
         composition = Hash.new(0)
         scanner = StringScanner.new(formula.reverse)
-        while scanner.restsize > 0
+        while scanner.rest_size > 0
           case
           when scanner.scan_full(/\)(\d+-?)\(/, true, false)
             # found a factor
@@ -133,7 +133,7 @@ module Molecules
 
         # Parse elements and factors out of the formula from right to left     
         scanner = StringScanner.new(formula.reverse)
-        while scanner.restsize > 0
+        while scanner.rest_size > 0
 
           case
           when scanner.scan_full(/(\d+)/, true, false)

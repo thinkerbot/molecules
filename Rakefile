@@ -13,6 +13,7 @@ Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.pattern = File.join('test', ENV['subset'] || '', ENV['pattern'] || '**/*_test.rb')
   t.verbose = true
+  t.warning = true
 end
 
 #
