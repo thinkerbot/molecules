@@ -47,8 +47,8 @@ Molecules provides a mass calculator tap task.  Tap[http://tap.rubyforge.org]
 is not required by molecules in general, but you get this bonus if you have tap
 installed:
 
-  % tap -- molecules/calc ":RPPGFSPFR + H2O"
-    I[15:34:30]         1077.57 Da :RPPGFSPFR + H2O
+  % tap run -- molecules/calc H2O
+    I[17:08:00]   18.0105646863 Da H2O
 
 == Known Issues
 
