@@ -299,7 +299,7 @@ module Molecules
     # - Masses are calculated such that mathematical operations 
     #   are performed on the return of the block.
     # 
-    def mass(&block)
+    def mass(&block) # :yields: element
       if block_given? 
         mass = 0
         each {|e, n| mass = (yield(e) * n) + mass }
