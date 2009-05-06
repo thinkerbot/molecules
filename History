@@ -1,0 +1,5 @@
+== 0.2.0 / 2009-06-05
+
+* added History
+* updated calc task for tap-0.17.0
+* changed calc syntax to process one formula at a time

@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "molecules"
-  s.version = "0.1.3"
+  s.version = "0.2.0"
   s.author = "Simon Chiang"
   s.email = "simon.a.chiang@gmail.com"
   s.homepage = "http://bioactive.rubyforge.org/molecules/"
@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "bioactive"
   s.require_path = "lib"
   s.add_dependency("constants", ">= 0.1.0")
-  s.add_development_dependency("tap", ">= 0.12.0")
+  s.add_development_dependency("tap", ">= 0.17.0")
 
   s.has_rdoc = true
   s.extra_rdoc_files = %w{
