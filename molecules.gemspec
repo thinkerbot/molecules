@@ -10,7 +10,8 @@ Gem::Specification.new do |s|
   s.require_path = "lib"
   s.add_dependency("constants", ">= 0.1.0")
   s.add_development_dependency("tap", ">= 0.17.0")
-
+  s.add_development_dependency("tap-test", ">= 0.1.0")
+  
   s.has_rdoc = true
   s.extra_rdoc_files = %w{
     README
